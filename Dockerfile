@@ -24,7 +24,7 @@ RUN apt-get update \
 
 # Install some python packages
 
-RUN if [ "$ROS_DISTRO" = "noetic"]; \
+RUN if [ "$ROS_DISTRO" = "noetic" ]; \
     then apt-get -y install \
     python3 \
     python3-pip \
