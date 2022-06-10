@@ -5,7 +5,7 @@ FROM ${ARCH}ros:${ROS_DISTRO}-ros-base
 LABEL maintainer="Mario Cristovao <mjpc13@protonmail.com>"
 
 ENV ROS_ROOT=/opt/ros/${ROS_DISTRO}
-ENV ROS_PYTHON_VERSION=3
+#ENV ROS_PYTHON_VERSION=3
 ENV DEBIAN_FRONTEND=noninteractive
 
 SHELL ["/bin/bash","-c"]
@@ -23,17 +23,29 @@ RUN apt-get update \
     nano 
 
 # Install some python packages
-RUN apt-get -y install \
+
+RUN if [ "$ROS_DISTRO" = "noetic"]; \
+    then apt-get -y install \
     python3 \
     python3-pip \
     python3-serial \
     python3-rosinstall \
     python3-rosinstall-generator \
     python3-wstool \
-    python3-rosdep
-
-RUN pip3 install pybind11 \
-    catkin_tools
+    python3-rosdep && \
+    pip3 install pybind11 \
+    catkin_tools; \
+    else apt-get -y install \
+        python \
+        python-pip \
+        python-serial \
+        python-rosinstall \
+        python-rosinstall-generator \
+        python-wstool \
+        python-rosdep && \
+        pip install pybind11 \
+        catkin_tools; \
+    fi
 
 # Clean-up
 RUN apt-get clean
