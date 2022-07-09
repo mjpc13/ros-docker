@@ -2,7 +2,8 @@ name: build base image
 
 on:
   push:
-    branches: main
+    tags:
+      - 'base-v*' # Push events to matching base-v*2
 
 jobs:
   build:
