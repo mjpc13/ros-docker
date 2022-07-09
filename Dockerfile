@@ -16,34 +16,33 @@ RUN apt-get update \
     # Basic utilities
     build-essential \
     apt-utils \
-    git \
     wget \
-    vim \
+    curl
 
 # Install some python packages
 
-RUN if [ "$ROS_DISTRO" = "noetic" ]; \
-    then apt-get -y install \
-    python3 \
-    python3-pip \
-    python3-serial \
-    python3-rosinstall \
-    python3-rosinstall-generator \
-    python3-wstool \
-    python3-rosdep && \
-    pip3 install pybind11 \
-    catkin_tools; \
-    else apt-get -y install \
-        python \
-        python-pip \
-        python-serial \
-        python-rosinstall \
-        python-rosinstall-generator \
-        python-wstool \
-        python-rosdep && \
-        pip install pybind11 \
-        catkin_tools; \
-    fi
+#RUN if [ "$ROS_DISTRO" = "noetic" ]; \
+#    then apt-get -y install \
+#    python3 \
+#    python3-pip \
+#    python3-serial \
+#    python3-rosinstall \
+#    python3-rosinstall-generator \
+#    python3-wstool \
+#    python3-rosdep && \
+#    pip3 install pybind11 \
+#    catkin_tools; \
+#    else apt-get -y install \
+#        python \
+#        python-pip \
+#        python-serial \
+#        python-rosinstall \
+#        python-rosinstall-generator \
+#        python-wstool \
+#        python-rosdep && \
+#        pip install pybind11 \
+#        catkin_tools; \
+#    fi
 
 # Clean-up
 RUN apt-get clean
@@ -53,7 +52,7 @@ RUN wget https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz
 RUN tar zxvf ngrok-v3-stable-linux-amd64.tgz
 
 #Configure entrypoint
-RUN echo "source /usr/local/bin/catkin_entrypoint.sh" >> /root/.bashrc
+#RUN echo "source /usr/local/bin/catkin_entrypoint.sh" >> /root/.bashrc
 COPY catkin_entrypoint.sh /usr/local/bin/catkin_entrypoint.sh
 RUN chmod +x /usr/local/bin/catkin_entrypoint.sh
 ENTRYPOINT ["/usr/local/bin/catkin_entrypoint.sh"]
