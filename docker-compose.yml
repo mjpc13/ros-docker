@@ -2,14 +2,18 @@
 networks:
   ros:
     driver: bridge
+    ipam:
+      config:
+        - subnet: 172.26.0.0/16
+          gateway: 172.26.0.1
 
 services:
   ros-master:
     image: ros:noetic-ros-core
-    command: stdbuf -o L roscore
+    command: stdbuf -o L roscore 
     networks:
-      - ros
-    restart: always
+      ros:
+        ipv4_address: 172.26.0.2
 
   talker:
     image: ros:noetic-ros-core
@@ -20,7 +24,6 @@ services:
     command: stdbuf -o L rostopic pub /chatter std_msgs/String "hello" -r 1
     networks:
       - ros
-    restart: always
 
   listener:
     image: ros:noetic-ros-core
@@ -31,9 +34,8 @@ services:
     command: stdbuf -o L rostopic echo /chatter
     networks:
       - ros
-    restart: always
 
-#Vizualization node example
+Vizualization node example
   viz:
     image: ros:noetic-perception
     container_name: ros_visualizer
