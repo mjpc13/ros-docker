@@ -10,7 +10,9 @@ networks:
 services:
   ros-master:
     image: ros:noetic-ros-core
-    command: stdbuf -o L roscore 
+    command: stdbuf -o L roscore
+    environment:
+      - "NGROK_TOKEN=your_token"
     networks:
       ros:
         ipv4_address: 172.26.0.2
@@ -35,7 +37,7 @@ services:
     networks:
       - ros
 
-Vizualization node example
+#Vizualization node example
   viz:
     image: ros:noetic-perception
     container_name: ros_visualizer

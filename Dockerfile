@@ -1,6 +1,6 @@
 ARG ARCH=
 ARG ROS_DISTRO= 
-FROM ${ARCH}ros:${ROS_DISTRO}-ros-base
+FROM ${ARCH}ros:${ROS_DISTRO}-ros-core
 
 LABEL maintainer="Mario Cristovao <mjpc13@protonmail.com>"
 
@@ -16,11 +16,9 @@ RUN apt-get update \
     # Basic utilities
     build-essential \
     apt-utils \
-    curl \
     git \
     wget \
     vim \
-    nano 
 
 # Install some python packages
 
@@ -50,16 +48,14 @@ RUN if [ "$ROS_DISTRO" = "noetic" ]; \
 # Clean-up
 RUN apt-get clean
 
-#Configure catkin workspace
-ENV CATKIN_WS=/root/catkin_ws
-RUN mkdir -p $CATKIN_WS/src
-WORKDIR $CATKIN_WS
-RUN catkin init
+#Install ngrok
+RUN wget https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz
+RUN tar zxvf ngrok-v3-stable-linux-amd64.tgz
 
+#Configure entrypoint
 RUN echo "source /usr/local/bin/catkin_entrypoint.sh" >> /root/.bashrc
 COPY catkin_entrypoint.sh /usr/local/bin/catkin_entrypoint.sh
 RUN chmod +x /usr/local/bin/catkin_entrypoint.sh
-
-
 ENTRYPOINT ["/usr/local/bin/catkin_entrypoint.sh"]
+
 CMD ["bash"]
