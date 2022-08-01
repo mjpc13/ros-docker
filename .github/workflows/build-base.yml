@@ -8,6 +8,7 @@ on:
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-20.04]
         ros_distro: [melodic, noetic]
@@ -25,5 +26,5 @@ jobs:
         run: |
           docker buildx build --push \
             --tag ${{secrets.DOCKER_USERNAME}}/ros:${{matrix.ros_distro}}-devel-base \
-            --platform linux/amd64,linux/arm/v7,linux/arm64 \
+            --platform linux/amd64,linux/arm64 \
             --build-arg ROS_DISTRO=${{matrix.ros_distro}} .
