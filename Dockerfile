@@ -1,60 +1,26 @@
 ARG ARCH=
 ARG ROS_DISTRO= 
-FROM ${ARCH}ros:${ROS_DISTRO}-ros-core
+FROM ${ARCH}mjpc13/ros:${ROS_DISTRO}-base
 
 LABEL maintainer="Mario Cristovao <mjpc13@protonmail.com>"
 
 ENV ROS_ROOT=/opt/ros/${ROS_DISTRO}
-#ENV ROS_PYTHON_VERSION=3
 ENV DEBIAN_FRONTEND=noninteractive
 
 SHELL ["/bin/bash","-c"]
 
-# Install packages
-RUN apt-get update \
-    && apt-get install -y \
-    # Basic utilities
-    build-essential \
-    apt-utils \
-    wget \
-    curl
+# Install Rust
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
+RUN source $HOME/.cargo/env && cargo install ros-project-generator
 
-# Install some python packages
+# Install Julia
+RUN apt update && apt install -y software-properties-common
+RUN apt-get install -y julia && \
+  rm -rf /var/lib/apt/lists/*
 
-#RUN if [ "$ROS_DISTRO" = "noetic" ]; \
-#    then apt-get -y install \
-#    python3 \
-#    python3-pip \
-#    python3-serial \
-#    python3-rosinstall \
-#    python3-rosinstall-generator \
-#    python3-wstool \
-#    python3-rosdep && \
-#    pip3 install pybind11 \
-#    catkin_tools; \
-#    else apt-get -y install \
-#        python \
-#        python-pip \
-#        python-serial \
-#        python-rosinstall \
-#        python-rosinstall-generator \
-#        python-wstool \
-#        python-rosdep && \
-#        pip install pybind11 \
-#        catkin_tools; \
-#    fi
+RUN julia -e 'using Pkg; Pkg.add("RobotOS")'
 
-# Clean-up
-RUN apt-get clean
-
-#Install ngrok
-RUN wget https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz
-RUN tar zxvf ngrok-v3-stable-linux-amd64.tgz
-
-#Configure entrypoint
-#RUN echo "source /usr/local/bin/catkin_entrypoint.sh" >> /root/.bashrc
-COPY catkin_entrypoint.sh /usr/local/bin/catkin_entrypoint.sh
-RUN chmod +x /usr/local/bin/catkin_entrypoint.sh
-ENTRYPOINT ["/usr/local/bin/catkin_entrypoint.sh"]
+#Install Kotlin
+# TODO
 
 CMD ["bash"]
