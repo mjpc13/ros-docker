@@ -18,7 +18,7 @@ RUN apt update && apt install -y software-properties-common
 RUN apt-get install -y julia && \
   rm -rf /var/lib/apt/lists/*
 
-RUN julia -e 'using Pkg; Pkg.add("RobotOS")'
+#RUN julia -e 'using Pkg; Pkg.add("RobotOS")'
 
 #Install Kotlin
 # TODO
