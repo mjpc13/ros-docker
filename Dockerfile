@@ -50,6 +50,10 @@ RUN if [ "$ROS_DISTRO" = "noetic" ]; \
 # Clean-up
 RUN apt-get clean
 
+# Install Rust
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
+RUN source $HOME/.cargo/env && cargo install ros-project-generator
+
 #Configure catkin workspace
 ENV CATKIN_WS=/root/catkin_ws
 RUN mkdir -p $CATKIN_WS/src
@@ -59,7 +63,6 @@ RUN catkin init
 RUN echo "source /usr/local/bin/catkin_entrypoint.sh" >> /root/.bashrc
 COPY catkin_entrypoint.sh /usr/local/bin/catkin_entrypoint.sh
 RUN chmod +x /usr/local/bin/catkin_entrypoint.sh
-
 
 ENTRYPOINT ["/usr/local/bin/catkin_entrypoint.sh"]
 CMD ["bash"]

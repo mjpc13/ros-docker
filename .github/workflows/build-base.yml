@@ -3,7 +3,7 @@ name: build base image
 on:
   push:
     tags:
-      - 'base-v*' # Push events to matching base-v*2
+      - 'rust-core-v*' # Push events to matching base-v*2
 
 jobs:
   build:
@@ -24,6 +24,6 @@ jobs:
       - name: build and push the image
         run: |
           docker buildx build --push \
-            --tag ${{secrets.DOCKER_USERNAME}}/ros:${{matrix.ros_distro}}-base \
+            --tag ${{secrets.DOCKER_USERNAME}}/ros:${{matrix.ros_distro}}-rust-core \
             --platform linux/amd64,linux/arm/v7,linux/arm64 \
             --build-arg ROS_DISTRO=${{matrix.ros_distro}} .
