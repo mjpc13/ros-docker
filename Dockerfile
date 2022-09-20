@@ -23,7 +23,6 @@ RUN apt-get update \
     nano 
 
 # Install some python packages
-
 RUN if [ "$ROS_DISTRO" = "noetic" ]; \
     then apt-get -y install \
     python3 \
@@ -46,6 +45,9 @@ RUN if [ "$ROS_DISTRO" = "noetic" ]; \
         pip install pybind11 \
         catkin_tools; \
     fi
+
+# Add ROS packages
+RUN apt-get install ros-$ROS_DISTRO-rosbridge-server
 
 # Clean-up
 RUN apt-get clean
