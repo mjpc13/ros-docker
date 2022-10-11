@@ -47,7 +47,7 @@ RUN if [ "$ROS_DISTRO" = "noetic" ]; \
     fi
 
 # Add ROS packages
-RUN apt-get install -y ros-$ROS_DISTRO-rosbridge-server
+RUN apt-get install -y ros-$ROS_DISTRO-rosbridge-server ros-$ROS_DISTRO-rviz
 
 # Clean-up
 RUN apt-get clean
